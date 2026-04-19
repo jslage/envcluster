@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Cluster Environment Archetypes</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            height: 100vh;
+            background: #111;
+            color: #eee;
+        }
+
+        #plot-container {
+            flex: 1;
+            padding: 20px;
+        }
+
+        #image-container {
+            width: 600px;
+            background: #1a1a1a;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-left: 1px solid #333;
+        }
+
+        img {
+            max-width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-weight: 400;
+            color: #ddd;
+        }
+
+        #instructions {
+            color: #888;
+            text-align: center;
+            font-size: 16px;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+
+        .watermark {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #444;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="plot-container">
+        <div id="plot" style="width:100%;height:100%;"></div>
+    </div>
+    <div id="image-container">
+        <h2 id="cluster-title">Select an archetypal cluster</h2>
+        <img id="cluster-image" src="" alt="Cluster previews will appear here" style="display:none;" />
+        <div id="instructions">
+            Click on any centroid point in the PCA scatter plot to the left.<br><br>
+        </div>
+    </div>
+
+    <script>
+        const data = [{ "cluster": 0, "x": -8.490596452257611, "y": -8.174745790162826 }, { "cluster": 1, "x": -14.941241663553493, "y": -15.454044359781406 }, { "cluster": 2, "x": -12.811809712273876, "y": 17.335259766698854 }, { "cluster": 3, "x": -30.87182435725913, "y": -3.993436795287901 }, { "cluster": 4, "x": 9.269281366980128, "y": -3.787614199521895 }, { "cluster": 5, "x": -4.961538341607962, "y": 4.082990066013395 }, { "cluster": 6, "x": 13.316075476110559, "y": -3.4583378922390096 }, { "cluster": 7, "x": -7.113391528940872, "y": 19.198551585374847 }, { "cluster": 8, "x": 4.5739349207403075, "y": 1.077535968516286 }, { "cluster": 9, "x": 8.385432406944151, "y": 1.366004252486202 }, { "cluster": 10, "x": -115.81187322489131, "y": -53.81889091765723 }, { "cluster": 11, "x": -6.835011618588059, "y": -13.158209046795466 }, { "cluster": 12, "x": 21.243685905959655, "y": -10.69513296357226 }, { "cluster": 13, "x": -70.93820287383217, "y": -26.995544713687195 }, { "cluster": 14, "x": 5.090497457551818, "y": 4.5512366903699695 }, { "cluster": 15, "x": -0.7498732328488056, "y": 10.843363906247628 }, { "cluster": 16, "x": -22.58432903386997, "y": -20.862488680700622 }, { "cluster": 17, "x": -20.948507179245897, "y": 29.053913795781526 }, { "cluster": 18, "x": -0.08820544160551433, "y": 12.823102037698673 }, { "cluster": 19, "x": 1.2172329563543691, "y": 10.727533569464729 }, { "cluster": 20, "x": -100.26550619696997, "y": -35.5434681385445 }, { "cluster": 21, "x": 2.1044691628226646, "y": 4.190198966630507 }, { "cluster": 22, "x": -67.63481550983253, "y": -27.64587598642369 }, { "cluster": 23, "x": -173.1591392242635, "y": -83.37932428931973 }, { "cluster": 24, "x": -31.977999491972845, "y": -15.881679484929967 }, { "cluster": 25, "x": -61.85433880012449, "y": -28.488604045401743 }, { "cluster": 26, "x": -13.764394871696902, "y": -3.6271774756970454 }, { "cluster": 27, "x": -36.127504261500114, "y": -12.144755590901568 }, { "cluster": 28, "x": -57.1921003877965, "y": -24.0537147542302 }, { "cluster": 29, "x": -36.2080618550672, "y": -9.339320098388171 }, { "cluster": 30, "x": -44.01157536032928, "y": -11.747874767048964 }, { "cluster": 31, "x": 25.46291932906697, "y": -13.129188842061275 }, { "cluster": 32, "x": 5.526253893616963, "y": -3.0669657966568247 }, { "cluster": 33, "x": 16.366726514160018, "y": -4.765998399471017 }, { "cluster": 34, "x": 12.309981528735321, "y": -6.662843602249443 }, { "cluster": 35, "x": 5.951600349489992, "y": 5.000250810619099 }, { "cluster": 36, "x": -48.688168412133976, "y": -24.11086647697954 }, { "cluster": 37, "x": 18.495643978196366, "y": -6.50761081964443 }, { "cluster": 38, "x": 16.69291155082107, "y": -8.194266113267505 }, { "cluster": 39, "x": 13.30782158786105, "y": -6.302552167784866 }, { "cluster": 40, "x": -57.2872561314842, "y": -20.277589324916033 }, { "cluster": 41, "x": 7.599789412523834, "y": 3.161267645438163 }, { "cluster": 42, "x": -70.06558525898323, "y": -34.10432518316834 }, { "cluster": 43, "x": 6.203711004328762, "y": 2.9649175561445373 }, { "cluster": 44, "x": -3.869683637084793, "y": 17.475829949077912 }, { "cluster": 45, "x": -85.27177050564227, "y": -38.251807830625395 }, { "cluster": 46, "x": 32.66832554011033, "y": -20.871398232425793 }, { "cluster": 47, "x": -33.47477293400535, "y": 0.6021016596136655 }, { "cluster": 48, "x": -70.04389825769658, "y": -15.658084831299465 }, { "cluster": 49, "x": -104.5994096736672, "y": -42.361287433945115 }];
+        const trace = {
+            x: data.map(d => d.x),
+            y: data.map(d => d.y),
+            mode: 'markers',
+            type: 'scatter',
+            marker: {
+                size: 16,
+                color: '#e74c3c',
+                line: { color: '#fff', width: 2 },
+                opacity: 0.8
+            },
+            text: data.map(d => 'Cluster ' + d.cluster),
+            customdata: data.map(d => d.cluster),
+            hoverinfo: 'text'
+        };
+
+        const layout = {
+            title: { text: 'Wildfire Environment Archetypes (PCA Centroids)', font: { color: '#fff', size: 24 } },
+            plot_bgcolor: '#111',
+            paper_bgcolor: '#111',
+            xaxis: { gridcolor: '#222', zerolinecolor: '#444', title: 'PCA Component 1', titlefont: { color: '#bbb' }, tickfont: { color: '#888' } },
+            yaxis: { gridcolor: '#222', zerolinecolor: '#444', title: 'PCA Component 2', titlefont: { color: '#bbb' }, tickfont: { color: '#888' } },
+            hovermode: 'closest',
+            margin: { t: 80, b: 60, l: 60, r: 40 }
+        };
+
+        const config = { responsive: true, displayModeBar: false };
+
+        Plotly.newPlot('plot', [trace], layout, config);
+
+        document.getElementById('plot').on('plotly_click', function (data) {
+            var clusterId = data.points[0].customdata;
+            document.getElementById('cluster-title').innerText = 'Cluster ' + clusterId + ' Top 4 Environments';
+            var img = document.getElementById('cluster-image');
+            // Adding timestamp to force refresh if image updates
+            img.src = 'images/cluster_' + clusterId + '.png?' + new Date().getTime();
+            img.style.display = 'block';
+            document.getElementById('instructions').style.display = 'none';
+        });
+    </script>
+</body>
+
+</html>
